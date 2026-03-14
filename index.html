@@ -185,10 +185,23 @@
       backdrop-filter: blur(10px);
       border: 1px solid rgba(255,255,255,0.12);
       border-radius: 24px;
-      padding: 28px 24px;
+      padding: 22px 24px;
       margin-bottom: 20px;
       text-align: center;
       animation: fadeInUp 0.4s ease;
+    }
+
+    .flag-img-wrap { margin-bottom: 14px; }
+
+    .flag-img {
+      width: 210px;
+      max-width: 75%;
+      height: auto;
+      border-radius: 10px;
+      box-shadow: 0 6px 28px rgba(0,0,0,0.55);
+      border: 3px solid rgba(255,255,255,0.25);
+      display: block;
+      margin: 0 auto;
     }
 
     .question-text {
@@ -424,6 +437,9 @@
   </div>
 
   <div class="question-card" id="question-card">
+    <div class="flag-img-wrap" id="flag-img-wrap" style="display:none">
+      <img class="flag-img" id="flag-img" src="" alt="Vlag" />
+    </div>
     <p class="question-text" id="question-text"></p>
   </div>
 
@@ -553,35 +569,6 @@ const CATEGORIES = {
       { q: "Welke woestijn is de grootste ter wereld?", a: "De Sahara", opts: ["De Sahara","De Gobi","De Arabische woestijn","De Atacama"] },
       { q: "Op welk continent ligt Rusland voornamelijk?", a: "Azië", opts: ["Azië","Europa","Noord-Amerika","Antarctica"] },
     ]
-  },
-  vlaggen: {
-    id: "vlaggen",
-    label: "🏳️ Vlaggen",
-    emoji: "🏳️",
-    name: "Vlaggen",
-    color: "#9B59B6",
-    bg: "linear-gradient(135deg, #9B59B6 0%, #D7BDE2 100%)",
-    description: "Welk land hoort bij deze vlag?",
-    questions: [
-      { q: "🇩🇪 Van welk land is dit de vlag?", a: "Duitsland", opts: ["Duitsland","België","Nederland","Oostenrijk"] },
-      { q: "🇫🇷 Van welk land is dit de vlag?", a: "Frankrijk", opts: ["Frankrijk","Nederland","Rusland","Italië"] },
-      { q: "🇮🇹 Van welk land is dit de vlag?", a: "Italië", opts: ["Italië","Hongarije","Ierland","Mexico"] },
-      { q: "🇧🇪 Van welk land is dit de vlag?", a: "België", opts: ["België","Duitsland","Nederland","Estland"] },
-      { q: "🇧🇷 Van welk land is dit de vlag?", a: "Brazilië", opts: ["Brazilië","Australië","VS","Mexico"] },
-      { q: "🇯🇵 Van welk land is dit de vlag?", a: "Japan", opts: ["Japan","Bangladesh","Zwitserland","Singapore"] },
-      { q: "🇨🇦 Van welk land is dit de vlag?", a: "Canada", opts: ["Canada","VS","Australië","Nieuw-Zeeland"] },
-      { q: "🇦🇺 Van welk land is dit de vlag?", a: "Australië", opts: ["Australië","Nieuw-Zeeland","Canada","VK"] },
-      { q: "🇨🇳 Van welk land is dit de vlag?", a: "China", opts: ["China","Vietnam","Noord-Korea","Mongolië"] },
-      { q: "🇿🇦 Van welk land is dit de vlag?", a: "Zuid-Afrika", opts: ["Zuid-Afrika","Nigeria","Jamaica","Kenia"] },
-      { q: "🇸🇪 Van welk land is dit de vlag?", a: "Zweden", opts: ["Zweden","Finland","Denemarken","Noorwegen"] },
-      { q: "🇬🇷 Van welk land is dit de vlag?", a: "Griekenland", opts: ["Griekenland","Italië","Kroatië","Cyprus"] },
-      { q: "🇵🇹 Van welk land is dit de vlag?", a: "Portugal", opts: ["Portugal","Spanje","Brazilië","Italië"] },
-      { q: "🇲🇽 Van welk land is dit de vlag?", a: "Mexico", opts: ["Mexico","Italië","Hongarije","Bulgarije"] },
-      { q: "🇦🇷 Van welk land is dit de vlag?", a: "Argentinië", opts: ["Argentinië","Uruguay","El Salvador","Honduras"] },
-      { q: "🇮🇳 Van welk land is dit de vlag?", a: "India", opts: ["India","Niger","Ierland","Italië"] },
-      { q: "🇺🇸 Van welk land is dit de vlag?", a: "Amerika (VS)", opts: ["Amerika (VS)","Liberia","Cuba","Puerto Rico"] },
-      { q: "🇪🇸 Van welk land is dit de vlag?", a: "Spanje", opts: ["Spanje","Andorra","Monaco","Colombia"] },
-    ]
   }
 };
 
@@ -699,7 +686,16 @@ function renderQuestion() {
     streakEl.style.display = "none";
   }
 
-  // Question
+  // Question + optional flag
+  const flagWrap = document.getElementById("flag-img-wrap");
+  const flagImg  = document.getElementById("flag-img");
+  if (q.flag) {
+    flagImg.src = `https://flagcdn.com/w320/${q.flag}.png`;
+    flagImg.alt = q.a;
+    flagWrap.style.display = "block";
+  } else {
+    flagWrap.style.display = "none";
+  }
   document.getElementById("question-text").textContent = q.q;
 
   // Feedback hidden
